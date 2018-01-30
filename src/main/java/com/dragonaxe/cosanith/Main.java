@@ -22,6 +22,11 @@ public class Main extends HelloBaseListener {
 
     public static void main(String[] args) {
 
+        if (args.length == 2) {
+            inputFileName = args[0];
+            outputFileName = args[1];
+        }
+
         try {
             try {
                 // String input = "5*(3+9)+(10)\n2+3+4+5\n";
