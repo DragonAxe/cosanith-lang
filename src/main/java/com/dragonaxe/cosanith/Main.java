@@ -17,8 +17,8 @@ import java.util.Stack;
 public class Main extends HelloBaseListener {
 
     // Note: These paths are relative to the project directory.
-    public static String inputFileName = "./src/main/llvm/input.txt";
-    public static String outputFileName = "./src/main/llvm/output.ll";
+    public static String inputFileName = "./llvm/input.txt";
+    public static String outputFileName = "./llvm/output.ll";
 
     public static void main(String[] args) {
 

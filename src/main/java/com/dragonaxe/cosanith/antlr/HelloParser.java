@@ -1,4 +1,5 @@
 // Generated from /home/dragonaxe/Dropbox/Programming/java/cosanith/src/main/antlr/Hello.g4 by ANTLR 4.7
+package com.dragonaxe.cosanith.antlr;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
