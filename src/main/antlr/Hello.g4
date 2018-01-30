@@ -1,5 +1,3 @@
-
-
 grammar Hello;
 prog:  (expr NEWLINE)* ;
 expr:  expr (MUL|DIV) expr

@@ -1,0 +1,11 @@
+grammar Cosa;
+prog: func (NEWLINE func)* NEWLINE* EOF ;
+func: '(' WHITESPACE* IDENT WHITESPACE* (WHITESPACE+ (IDENT|func))* ')' ;
+IDENT : [a-zA-Z0-9]+;
+ADD : '+';
+SUB : '-';
+MUL : '*';
+DIV : '/';
+WHITESPACE : [ \r\n]+ ;
+NEWLINE : [\r\n]+ ;
+INT     : [0-9]+ ;

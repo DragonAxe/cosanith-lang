@@ -1,29 +1,47 @@
-import ast.Int;
-import ast.Opp;
-import ast.Prog;
+package com.dragonaxe.cosanith;
+
+import com.dragonaxe.cosanith.antlr.HelloBaseListener;
+import com.dragonaxe.cosanith.antlr.HelloLexer;
+import com.dragonaxe.cosanith.antlr.HelloParser;
+import com.dragonaxe.cosanith.ast.Int;
+import com.dragonaxe.cosanith.ast.Opp;
+import com.dragonaxe.cosanith.ast.Prog;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Stack;
 
 public class Main extends HelloBaseListener {
 
+    // Note: These paths are relative to the project directory.
+    public static String inputFileName = "./src/main/llvm/input.txt";
+    public static String outputFileName = "./src/main/llvm/output.ll";
+
     public static void main(String[] args) {
 
         try {
-            String input = "5*(3+9)+(10)\n2+3+4+5\n";
-            CharStream cs = CharStreams.fromString(input);
-            HelloLexer lexer = new HelloLexer(cs);
-            HelloParser hp = new HelloParser(new CommonTokenStream(lexer));
-            HelloParser.ProgContext pc = hp.prog();
-            ParseTreeWalker walker = new ParseTreeWalker();
-            Main listener = new Main();
-            walker.walk(listener, pc);
-        } catch (RuntimeException e) {
-            System.err.println("Error: " + e);
-            System.err.println("Current Progress: " + currentProg);
-            throw e;
+            try {
+                // String input = "5*(3+9)+(10)\n2+3+4+5\n";
+                System.out.println("Reading from file: " + inputFileName);
+                System.out.println("----");
+                CharStream cs = CharStreams.fromFileName(inputFileName);
+                // CharStream cs = CharStreams.fromString(input);
+                HelloLexer lexer = new HelloLexer(cs);
+                HelloParser hp = new HelloParser(new CommonTokenStream(lexer));
+                HelloParser.ProgContext pc = hp.prog();
+                ParseTreeWalker walker = new ParseTreeWalker();
+                Main listener = new Main();
+                walker.walk(listener, pc);
+            } catch (RuntimeException e) {
+                System.err.println("Error: " + e);
+                System.err.println("Current Progress: " + currentProg);
+                throw e;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -34,7 +52,7 @@ public class Main extends HelloBaseListener {
 
     @Override
     public void enterProg(HelloParser.ProgContext ctx) {
-        System.out.println("New Program: " + ctx.getText());
+        // System.out.println("New Program: " + ctx.getText());
         currentProg = new Prog();
         currentExpr = new Stack<Opp>();
         currentParam = new Stack<Integer>();
@@ -43,14 +61,24 @@ public class Main extends HelloBaseListener {
     @Override
     public void exitProg(HelloParser.ProgContext ctx) {
         System.out.print(currentProg);
+        System.out.println("----");
+        System.out.println("llvm ir written to file: " + outputFileName);
+        String llvmProg = currentProg.toLLVM();
+        try {
+            PrintWriter out = new PrintWriter(outputFileName);
+            out.print(llvmProg);
+            out.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void enterExpr(HelloParser.ExprContext ctx) {
-        System.out.println("New Expression: " + ctx.getText() + " ChildCount:" + ctx.getChildCount()
-            + " RuleIndex:" + ctx.getRuleIndex());
+        // System.out.println("New Expression: " + ctx.getText() + " ChildCount:" + ctx.getChildCount()
+        //     + " RuleIndex:" + ctx.getRuleIndex());
         if (ctx.getChildCount() == 3 && ctx.getChild(1).getChildCount() == 0) {
-            System.out.println("Pushed Opp");
+            // System.out.println("Pushed Opp");
             currentExpr.push(new Opp());
             currentParam.push(0);
         }
@@ -61,7 +89,7 @@ public class Main extends HelloBaseListener {
         if (ctx.getChildCount() == 3 && ctx.getChild(1).getChildCount() == 0) {
             Opp opp = currentExpr.pop();
             currentParam.pop();
-            System.out.println("Popped Opp: " + opp);
+            // System.out.println("Popped Opp: " + opp);
             if (currentExpr.empty()) {
                 currentProg.lines.add(opp);
             } else {
@@ -77,7 +105,7 @@ public class Main extends HelloBaseListener {
 
     @Override
     public void visitTerminal(TerminalNode node) {
-        System.out.println("New Terminal: " + node.getText());
+        // System.out.println("New Terminal: " + node.getText());
         if (node.getText().equals("(") || node.getText().equals(")") || node.getText().equals("\n")) {
             return;
         }
@@ -101,6 +129,6 @@ public class Main extends HelloBaseListener {
         }
         int tmp = currentParam.pop() + 1;
         currentParam.push(tmp);
-        System.out.println(opp);
+        // System.out.println(opp);
     }
 }

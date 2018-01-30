@@ -3,6 +3,43 @@
 This is my attempt to create a parenthesis based language
 that compiles to llvm intermediate representation.
 
+## Why the name Cosanith?
+I basically went to [fantacynamegenerators.com/dragon_names][1]
+and found a name I liked, then added a bit to the end to make
+it a little more unique, and ended up with 'Cosanith'.
+
+[1]: http://www.fantasynamegenerators.com/dragon_names.php
+
+## Sample llvm ir Output
+
+The following is the sample input and output to my compiler as of 2018-01-29:
+
+Input:
+
+    100+2*34
+    (10*8)-(2+3)
+
+Output:
+
+    target triple = "x86_64-unknown-linux-gnu"
+    
+    @str = internal constant [4 x i8] c"%d\0A\00"
+    
+    declare i32 @printf(i8*, ...)
+    
+    define i32 @main() {
+        %ab = mul i32 2, 34
+        %aa = add i32 100, %ab
+        call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @str, i32 0, i32 0), i32 %aa)
+        %ad = mul i32 10, 8
+        %ae = add i32 2, 3
+        %ac = sub i32 %ad, %ae
+        call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @str, i32 0, i32 0), i32 %ac)
+        ret i32 0
+    }
+
+
+## Old Sample Output
 Here is some sample output as of 2018-01-27:
 
     New Program: 5*(3+9)+(10)

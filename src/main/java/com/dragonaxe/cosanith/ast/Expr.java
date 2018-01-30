@@ -1,4 +1,4 @@
-package ast;
+package com.dragonaxe.cosanith.ast;
 
 public class Expr {
 
