@@ -1,0 +1,71 @@
+// Lisp like
+(def main (Strings args) (Int)
+     (if (> args.length 0)
+         (print (args.get 1))
+         (print "No parameters")))
+
+// Lisp like
+(def really_really_really_long_name
+     (String lots Int of Box parameters, Out in)
+     (Int retval ComplexObject leftright)
+     (return (5, headbone)))
+
+// Python like
+def main(String args) -> (Int StdOut StdErr)
+    if args.length != 1
+       print "Sorry"
+    else max = args.get(1).parseInt
+         def loop(Int num)
+             if num % 3 && mum % 5
+                print "fizzbuzz"
+             elif num % 3
+                print "fizz"
+             elif num % 5
+                print "buzz"
+             else
+                print num
+             if num <= max
+                loop(num+1)
+
+// Scala like
+def main(String args) -> (Int StdOut StdErr)
+	numberStream.map(x -> match %3==0 && %5==0: "Fizzbuzz"
+							    %3==0: "Fizz"
+							    %5==0: "Buzz"
+								else: x).get(1,100)
+
+// Lisp Scala with streams
+(def main (Strings args) (Int)
+     (numberStream.map
+         (match x
+                (x%3==0 && %5==0) ("FizzBuzz")
+                (x%3==0)          ("Fizz")
+                (x%5==0)          ("Buzz")
+                (true)            (x)))
+         .get(1,100))
+
+// Lisp Clojure with streams
+(def main (Strings args) (Int)
+     (-> numberStream
+         (map (match x (x%3==0 && %5==0) ("FizzBuzz")
+                       (x%3==0)          ("Fizz")
+                       (x%5==0)          ("Buzz")
+                       (true)            (x)))
+         (get 1 100)))
+
+// Python like
+def really_really_really_long_name
+        (String lots, Int of, Box parameters, Out in)
+        -> (Int retval, ComplexObject leftright)
+    
+    return (5, headbone)
+
+
+
+
+
+
+
+
+
+
